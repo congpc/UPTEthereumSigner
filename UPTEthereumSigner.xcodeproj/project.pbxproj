@@ -8,27 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		0004257B2683C0FC0013BC97 /* UPTEthereumSigner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 000425712683C0FB0013BC97 /* UPTEthereumSigner.framework */; };
-		000425992683C1950013BC97 /* keccak.c in Sources */ = {isa = PBXBuildFile; fileRef = 0004258E2683C1950013BC97 /* keccak.c */; };
-		0004259A2683C1950013BC97 /* UPTHDSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0004258F2683C1950013BC97 /* UPTHDSigner.m */; };
-		0004259B2683C1950013BC97 /* UPTEthereumSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 000425902683C1950013BC97 /* UPTEthereumSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0004259C2683C1950013BC97 /* EthereumSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 000425912683C1950013BC97 /* EthereumSigner.m */; };
-		0004259E2683C1950013BC97 /* UPTEthereumSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 000425932683C1950013BC97 /* UPTEthereumSigner.m */; };
-		0004259F2683C1950013BC97 /* UPTHDSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 000425942683C1950013BC97 /* UPTHDSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		000425A02683C1950013BC97 /* keccak.h in Headers */ = {isa = PBXBuildFile; fileRef = 000425952683C1950013BC97 /* keccak.h */; };
-		000425A12683C1950013BC97 /* EthereumSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 000425962683C1950013BC97 /* EthereumSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		000425A22683C1950013BC97 /* UPTProtectionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 000425972683C1950013BC97 /* UPTProtectionLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		007FA8372684732D001EC167 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA8332684732D001EC167 /* openssl.xcframework */; };
 		007FA8382684732D001EC167 /* openssl.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA8332684732D001EC167 /* openssl.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		007FA8392684732D001EC167 /* CoreEth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA8342684732D001EC167 /* CoreEth.xcframework */; };
 		007FA83A2684732D001EC167 /* CoreEth.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA8342684732D001EC167 /* CoreEth.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		007FA83D268483C3001EC167 /* Valet.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA83C268483C3001EC167 /* Valet.xcframework */; };
 		007FA83E268483D0001EC167 /* Valet.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA83C268483C3001EC167 /* Valet.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		007FA84326848A39001EC167 /* EthereumSignerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 007FA83F26848A39001EC167 /* EthereumSignerTest.m */; };
-		007FA84426848A39001EC167 /* SignerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 007FA84126848A39001EC167 /* SignerTests.m */; };
-		007FA84526848A39001EC167 /* UPTHDSignerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 007FA84226848A39001EC167 /* UPTHDSignerSpec.m */; };
-		007FA84826848A79001EC167 /* ReferenceData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 007FA84626848A79001EC167 /* ReferenceData.plist */; };
-		007FA84926848A79001EC167 /* KeyPairsTestData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 007FA84726848A79001EC167 /* KeyPairsTestData.plist */; };
-		007FA84B26848CE9001EC167 /* Specta.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007FA84A26848CE9001EC167 /* Specta.xcframework */; };
+		00A5156C26909391005AF00E /* UPTHDSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A5156226909391005AF00E /* UPTHDSigner.m */; };
+		00A5156D26909391005AF00E /* EthereumSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A5156326909391005AF00E /* EthereumSigner.m */; };
+		00A5156E26909391005AF00E /* keccak.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5156426909391005AF00E /* keccak.h */; };
+		00A5156F26909391005AF00E /* UPTEthSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5156526909391005AF00E /* UPTEthSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A5157026909391005AF00E /* UPTHDSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5156626909391005AF00E /* UPTHDSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A5157126909391005AF00E /* keccak.c in Sources */ = {isa = PBXBuildFile; fileRef = 00A5156726909391005AF00E /* keccak.c */; };
+		00A5157226909391005AF00E /* UPTProtectionLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5156826909391005AF00E /* UPTProtectionLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A5157326909391005AF00E /* EthereumSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5156926909391005AF00E /* EthereumSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A5157426909391005AF00E /* UPTEthereumSigner.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5156A26909391005AF00E /* UPTEthereumSigner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00A5157526909391005AF00E /* UPTEthSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A5156B26909391005AF00E /* UPTEthSigner.m */; };
+		00A5157C2690970E005AF00E /* SignerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A515762690970E005AF00E /* SignerTests.m */; };
+		00A5157D2690970E005AF00E /* UPTEthSignerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A515772690970E005AF00E /* UPTEthSignerTests.m */; };
+		00A5157E2690970E005AF00E /* KeyPairsTestData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00A515782690970E005AF00E /* KeyPairsTestData.plist */; };
+		00A5157F2690970E005AF00E /* EthereumSignerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A515792690970E005AF00E /* EthereumSignerTests.m */; };
+		00A515802690970E005AF00E /* ReferenceData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00A5157A2690970E005AF00E /* ReferenceData.plist */; };
+		00A515812690970E005AF00E /* UPTHDSignerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A5157B2690970E005AF00E /* UPTHDSignerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,25 +63,25 @@
 		000425752683C0FB0013BC97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0004257A2683C0FC0013BC97 /* UPTEthereumSignerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UPTEthereumSignerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		000425812683C0FC0013BC97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0004258E2683C1950013BC97 /* keccak.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = keccak.c; sourceTree = "<group>"; };
-		0004258F2683C1950013BC97 /* UPTHDSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTHDSigner.m; sourceTree = "<group>"; };
-		000425902683C1950013BC97 /* UPTEthereumSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTEthereumSigner.h; sourceTree = "<group>"; };
-		000425912683C1950013BC97 /* EthereumSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EthereumSigner.m; sourceTree = "<group>"; };
-		000425932683C1950013BC97 /* UPTEthereumSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTEthereumSigner.m; sourceTree = "<group>"; };
-		000425942683C1950013BC97 /* UPTHDSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTHDSigner.h; sourceTree = "<group>"; };
-		000425952683C1950013BC97 /* keccak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keccak.h; sourceTree = "<group>"; };
-		000425962683C1950013BC97 /* EthereumSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthereumSigner.h; sourceTree = "<group>"; };
-		000425972683C1950013BC97 /* UPTProtectionLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTProtectionLevel.h; sourceTree = "<group>"; };
 		007FA8332684732D001EC167 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = Carthage/Build/openssl.xcframework; sourceTree = "<group>"; };
 		007FA8342684732D001EC167 /* CoreEth.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoreEth.xcframework; path = Carthage/Build/CoreEth.xcframework; sourceTree = "<group>"; };
 		007FA83C268483C3001EC167 /* Valet.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Valet.xcframework; path = Carthage/Build/Valet.xcframework; sourceTree = "<group>"; };
-		007FA83F26848A39001EC167 /* EthereumSignerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EthereumSignerTest.m; sourceTree = "<group>"; };
-		007FA84026848A39001EC167 /* Tests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		007FA84126848A39001EC167 /* SignerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignerTests.m; sourceTree = "<group>"; };
-		007FA84226848A39001EC167 /* UPTHDSignerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTHDSignerSpec.m; sourceTree = "<group>"; };
-		007FA84626848A79001EC167 /* ReferenceData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ReferenceData.plist; sourceTree = "<group>"; };
-		007FA84726848A79001EC167 /* KeyPairsTestData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyPairsTestData.plist; sourceTree = "<group>"; };
-		007FA84A26848CE9001EC167 /* Specta.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Specta.xcframework; path = Carthage/Build/Specta.xcframework; sourceTree = "<group>"; };
+		00A5156226909391005AF00E /* UPTHDSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTHDSigner.m; sourceTree = "<group>"; };
+		00A5156326909391005AF00E /* EthereumSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EthereumSigner.m; sourceTree = "<group>"; };
+		00A5156426909391005AF00E /* keccak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keccak.h; sourceTree = "<group>"; };
+		00A5156526909391005AF00E /* UPTEthSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTEthSigner.h; sourceTree = "<group>"; };
+		00A5156626909391005AF00E /* UPTHDSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTHDSigner.h; sourceTree = "<group>"; };
+		00A5156726909391005AF00E /* keccak.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = keccak.c; sourceTree = "<group>"; };
+		00A5156826909391005AF00E /* UPTProtectionLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTProtectionLevel.h; sourceTree = "<group>"; };
+		00A5156926909391005AF00E /* EthereumSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthereumSigner.h; sourceTree = "<group>"; };
+		00A5156A26909391005AF00E /* UPTEthereumSigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTEthereumSigner.h; sourceTree = "<group>"; };
+		00A5156B26909391005AF00E /* UPTEthSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTEthSigner.m; sourceTree = "<group>"; };
+		00A515762690970E005AF00E /* SignerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignerTests.m; sourceTree = "<group>"; };
+		00A515772690970E005AF00E /* UPTEthSignerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTEthSignerTests.m; sourceTree = "<group>"; };
+		00A515782690970E005AF00E /* KeyPairsTestData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = KeyPairsTestData.plist; sourceTree = "<group>"; };
+		00A515792690970E005AF00E /* EthereumSignerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EthereumSignerTests.m; sourceTree = "<group>"; };
+		00A5157A2690970E005AF00E /* ReferenceData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ReferenceData.plist; sourceTree = "<group>"; };
+		00A5157B2690970E005AF00E /* UPTHDSignerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTHDSignerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007FA84B26848CE9001EC167 /* Specta.xcframework in Frameworks */,
 				0004257B2683C0FC0013BC97 /* UPTEthereumSigner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,9 +128,17 @@
 		000425732683C0FB0013BC97 /* UPTEthereumSigner */ = {
 			isa = PBXGroup;
 			children = (
-				0004258B2683C1950013BC97 /* Assets */,
-				0004258D2683C1950013BC97 /* Classes */,
+				00A5156926909391005AF00E /* EthereumSigner.h */,
+				00A5156326909391005AF00E /* EthereumSigner.m */,
 				000425752683C0FB0013BC97 /* Info.plist */,
+				00A5156726909391005AF00E /* keccak.c */,
+				00A5156426909391005AF00E /* keccak.h */,
+				00A5156A26909391005AF00E /* UPTEthereumSigner.h */,
+				00A5156526909391005AF00E /* UPTEthSigner.h */,
+				00A5156B26909391005AF00E /* UPTEthSigner.m */,
+				00A5156626909391005AF00E /* UPTHDSigner.h */,
+				00A5156226909391005AF00E /* UPTHDSigner.m */,
+				00A5156826909391005AF00E /* UPTProtectionLevel.h */,
 			);
 			path = UPTEthereumSigner;
 			sourceTree = "<group>";
@@ -138,44 +146,20 @@
 		0004257E2683C0FC0013BC97 /* UPTEthereumSignerTests */ = {
 			isa = PBXGroup;
 			children = (
-				007FA83F26848A39001EC167 /* EthereumSignerTest.m */,
+				00A515792690970E005AF00E /* EthereumSignerTests.m */,
+				00A515782690970E005AF00E /* KeyPairsTestData.plist */,
+				00A5157A2690970E005AF00E /* ReferenceData.plist */,
+				00A515762690970E005AF00E /* SignerTests.m */,
+				00A515772690970E005AF00E /* UPTEthSignerTests.m */,
+				00A5157B2690970E005AF00E /* UPTHDSignerTests.m */,
 				000425812683C0FC0013BC97 /* Info.plist */,
-				007FA84726848A79001EC167 /* KeyPairsTestData.plist */,
-				007FA84626848A79001EC167 /* ReferenceData.plist */,
-				007FA84126848A39001EC167 /* SignerTests.m */,
-				007FA84026848A39001EC167 /* Tests-Prefix.pch */,
-				007FA84226848A39001EC167 /* UPTHDSignerSpec.m */,
 			);
 			path = UPTEthereumSignerTests;
-			sourceTree = "<group>";
-		};
-		0004258B2683C1950013BC97 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Assets;
-			sourceTree = "<group>";
-		};
-		0004258D2683C1950013BC97 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				000425962683C1950013BC97 /* EthereumSigner.h */,
-				000425912683C1950013BC97 /* EthereumSigner.m */,
-				0004258E2683C1950013BC97 /* keccak.c */,
-				000425952683C1950013BC97 /* keccak.h */,
-				000425902683C1950013BC97 /* UPTEthereumSigner.h */,
-				000425932683C1950013BC97 /* UPTEthereumSigner.m */,
-				000425942683C1950013BC97 /* UPTHDSigner.h */,
-				0004258F2683C1950013BC97 /* UPTHDSigner.m */,
-				000425972683C1950013BC97 /* UPTProtectionLevel.h */,
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		000425A62684262C0013BC97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				007FA84A26848CE9001EC167 /* Specta.xcframework */,
 				007FA83C268483C3001EC167 /* Valet.xcframework */,
 				007FA8342684732D001EC167 /* CoreEth.xcframework */,
 				007FA8332684732D001EC167 /* openssl.xcframework */,
@@ -190,11 +174,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				000425A02683C1950013BC97 /* keccak.h in Headers */,
-				0004259F2683C1950013BC97 /* UPTHDSigner.h in Headers */,
-				000425A22683C1950013BC97 /* UPTProtectionLevel.h in Headers */,
-				0004259B2683C1950013BC97 /* UPTEthereumSigner.h in Headers */,
-				000425A12683C1950013BC97 /* EthereumSigner.h in Headers */,
+				00A5156F26909391005AF00E /* UPTEthSigner.h in Headers */,
+				00A5157026909391005AF00E /* UPTHDSigner.h in Headers */,
+				00A5157226909391005AF00E /* UPTProtectionLevel.h in Headers */,
+				00A5157426909391005AF00E /* UPTEthereumSigner.h in Headers */,
+				00A5157326909391005AF00E /* EthereumSigner.h in Headers */,
+				00A5156E26909391005AF00E /* keccak.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,8 +270,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007FA84926848A79001EC167 /* KeyPairsTestData.plist in Resources */,
-				007FA84826848A79001EC167 /* ReferenceData.plist in Resources */,
+				00A515802690970E005AF00E /* ReferenceData.plist in Resources */,
+				00A5157E2690970E005AF00E /* KeyPairsTestData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,10 +282,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				000425992683C1950013BC97 /* keccak.c in Sources */,
-				0004259A2683C1950013BC97 /* UPTHDSigner.m in Sources */,
-				0004259E2683C1950013BC97 /* UPTEthereumSigner.m in Sources */,
-				0004259C2683C1950013BC97 /* EthereumSigner.m in Sources */,
+				00A5156D26909391005AF00E /* EthereumSigner.m in Sources */,
+				00A5157126909391005AF00E /* keccak.c in Sources */,
+				00A5156C26909391005AF00E /* UPTHDSigner.m in Sources */,
+				00A5157526909391005AF00E /* UPTEthSigner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,9 +293,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007FA84326848A39001EC167 /* EthereumSignerTest.m in Sources */,
-				007FA84526848A39001EC167 /* UPTHDSignerSpec.m in Sources */,
-				007FA84426848A39001EC167 /* SignerTests.m in Sources */,
+				00A5157C2690970E005AF00E /* SignerTests.m in Sources */,
+				00A515812690970E005AF00E /* UPTHDSignerTests.m in Sources */,
+				00A5157D2690970E005AF00E /* UPTEthSignerTests.m in Sources */,
+				00A5157F2690970E005AF00E /* EthereumSignerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,7 +495,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/UPTEthereumSignerTests/Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = UPTEthereumSignerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -526,7 +512,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/UPTEthereumSignerTests/Tests-Prefix.pch";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = UPTEthereumSignerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

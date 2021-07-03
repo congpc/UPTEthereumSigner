@@ -19,17 +19,12 @@
 //  You should have received a copy of the GNU General Public License
 //  along with UPTEthereumSigner.  If not, see <http://www.gnu.org/licenses/>.
 //
-@import CoreEth;
 
+@import CoreEth;
 #import "EthereumSigner.h"
 
-//#import "EthCore/CoreBitcoin+Categories.h"
-//#import "EthCore/BTCKey.h"
-#include <openssl/bn.h>
-#include <openssl/ec.h>
-#include <openssl/obj_mac.h>
-
-NSMutableData *compressedPublicKey(EC_KEY *key) {
+NSMutableData *compressedPublicKey(EC_KEY *key)
+{
     if (!key) return nil;
     EC_KEY_set_conv_form(key, POINT_CONVERSION_COMPRESSED);
     int length = i2o_ECPublicKey(key, NULL);
@@ -41,15 +36,17 @@ NSMutableData *compressedPublicKey(EC_KEY *key) {
     return data;
 }
 
-NSDictionary *ethereumSignature(BTCKey *keypair, NSData *hash, NSData *chainId) {
+NSDictionary *ethereumSignature(BTCKey *keypair, NSData *hash, NSData *chainId)
+{
     NSDictionary *sig = genericSignature(keypair, hash, YES);
     if (sig == nil) return NULL;
     NSData *rData = (NSData *)sig[@"r"];
     NSData *sData = (NSData *)sig[@"s"];
     BN_ULONG base = 0x1b; // pre-EIP155
-    if (chainId) {
-        BIGNUM *v = BN_new(); BN_bin2bn(chainId.bytes, chainId.length, v);
-        // TODO support longer chainIDs
+    if (chainId)
+    {
+        BIGNUM *v = BN_new(); BN_bin2bn(chainId.bytes, (int)chainId.length, v);
+        // TODO: support longer chainIDs
         base = BN_get_word(v) * 2 + 35;
         BN_clear_free(v);
     }
@@ -109,11 +106,14 @@ NSDictionary *genericSignature(BTCKey *keypair, NSData *hash, BOOL lowS) {
     BTCBigNumber *twiceS = [[signatureBN mutableCopy] add:signatureBN];
     
     BTCBigNumber *s;
-    if (lowS && BN_cmp(twiceS.BIGNUM, n.BIGNUM) > 0) {
+    if (lowS && BN_cmp(twiceS.BIGNUM, n.BIGNUM) > 0)
+    {
         // enforce low S values, by negating the value (modulo the order) if above order/2.
         s = [[n mutableCopy] subtract:signatureBN]; // Maybe this should be swapped
         recoveryParam ^= 1;
-    } else {
+    }
+    else
+    {
         s = [signatureBN copy];
     }
     
@@ -130,7 +130,8 @@ NSDictionary *genericSignature(BTCKey *keypair, NSData *hash, BOOL lowS) {
               @"recoveryParam" : @(recoveryParam) };
 }
 
-NSData *simpleSignature(BTCKey *keypair, NSData *hash) {
+NSData *simpleSignature(BTCKey *keypair, NSData *hash)
+{
     NSDictionary *sig = genericSignature(keypair, hash, NO);
     if (sig  == nil) return NULL;
     NSData *rData = (NSData *)sig[@"r"];
@@ -145,7 +146,15 @@ NSData *simpleSignature(BTCKey *keypair, NSData *hash) {
 }
 
 // Not used here but leave in for use in library when pulling out again
-static int ECDSA_SIG_recover_key_GFp(EC_KEY *eckey, BIGNUM *r, BIGNUM *s, const unsigned char *msg, int msglen, int recid, int check) {
+#ifdef NOT_USED
+static int ECDSA_SIG_recover_key_GFp(EC_KEY *eckey,
+                                     BIGNUM *r,
+                                     BIGNUM *s,
+                                     const unsigned char *msg,
+                                     int msglen,
+                                     int recid,
+                                     int check)
+{
     if (!eckey) return 0;
     
     int ret = 0;
@@ -171,45 +180,50 @@ static int ECDSA_SIG_recover_key_GFp(EC_KEY *eckey, BIGNUM *r, BIGNUM *s, const 
     order = BN_CTX_get(ctx);
     if (!EC_GROUP_get_order(group, order, ctx)) { ret = -2; goto err; }
     x = BN_CTX_get(ctx);
-    if (!BN_copy(x, order)) { ret=-1; goto err; }
-    if (!BN_mul_word(x, i)) { ret=-1; goto err; }
-    if (!BN_add(x, x, r)) { ret=-1; goto err; }
+    if (!BN_copy(x, order)) { ret = -1; goto err; }
+    if (!BN_mul_word(x, i)) { ret = -1; goto err; }
+    if (!BN_add(x, x, r)) { ret = -1; goto err; }
     field = BN_CTX_get(ctx);
-    if (!EC_GROUP_get_curve_GFp(group, field, NULL, NULL, ctx)) { ret=-2; goto err; }
-    if (BN_cmp(x, field) >= 0) { ret=0; goto err; }
+    if (!EC_GROUP_get_curve_GFp(group, field, NULL, NULL, ctx)) { ret = -2; goto err; }
+    if (BN_cmp(x, field) >= 0) { ret = 0; goto err; }
     if ((R = EC_POINT_new(group)) == NULL) { ret = -2; goto err; }
-    if (!EC_POINT_set_compressed_coordinates_GFp(group, R, x, recid % 2, ctx)) { ret=0; goto err; }
-    if (check) {
+    if (!EC_POINT_set_compressed_coordinates_GFp(group, R, x, recid % 2, ctx)) { ret = 0; goto err; }
+    if (check)
+    {
         if ((O = EC_POINT_new(group)) == NULL) { ret = -2; goto err; }
-        if (!EC_POINT_mul(group, O, NULL, R, order, ctx)) { ret=-2; goto err; }
+        if (!EC_POINT_mul(group, O, NULL, R, order, ctx)) { ret = -2; goto err; }
         if (!EC_POINT_is_at_infinity(group, O)) { ret = 0; goto err; }
     }
     if ((Q = EC_POINT_new(group)) == NULL) { ret = -2; goto err; }
     n = EC_GROUP_get_degree(group);
     e = BN_CTX_get(ctx);
-    if (!BN_bin2bn(msg, msglen, e)) { ret=-1; goto err; }
+    if (!BN_bin2bn(msg, msglen, e)) { ret = -1; goto err; }
     if (8*msglen > n) BN_rshift(e, e, 8-(n & 7));
     zero = BN_CTX_get(ctx);
-    if (!BN_zero(zero)) { ret=-1; goto err; }
-    if (!BN_mod_sub(e, zero, e, order, ctx)) { ret=-1; goto err; }
+    if (!BN_zero(zero)) { ret = -1; goto err; }
+    if (!BN_mod_sub(e, zero, e, order, ctx)) { ret = -1; goto err; }
     rr = BN_CTX_get(ctx);
-    if (!BN_mod_inverse(rr, r, order, ctx)) { ret=-1; goto err; }
+    if (!BN_mod_inverse(rr, r, order, ctx)) { ret = -1; goto err; }
     sor = BN_CTX_get(ctx);
-    if (!BN_mod_mul(sor, s, rr, order, ctx)) { ret=-1; goto err; }
+    if (!BN_mod_mul(sor, s, rr, order, ctx)) { ret = -1; goto err; }
     eor = BN_CTX_get(ctx);
-    if (!BN_mod_mul(eor, e, rr, order, ctx)) { ret=-1; goto err; }
-    if (!EC_POINT_mul(group, Q, eor, R, sor, ctx)) { ret=-2; goto err; }
-    if (!EC_KEY_set_public_key(eckey, Q)) { ret=-2; goto err; }
+    if (!BN_mod_mul(eor, e, rr, order, ctx)) { ret = -1; goto err; }
+    if (!EC_POINT_mul(group, Q, eor, R, sor, ctx)) { ret = -2; goto err; }
+    if (!EC_KEY_set_public_key(eckey, Q)) { ret = -2; goto err; }
     
     ret = 1;
     
 err:
-    if (ctx) {
+    if (ctx)
+    {
         BN_CTX_end(ctx);
         BN_CTX_free(ctx);
     }
-    if (R != NULL) EC_POINT_free(R);
-    if (O != NULL) EC_POINT_free(O);
-    if (Q != NULL) EC_POINT_free(Q);
+
+    if (R != NULL) { EC_POINT_free(R); }
+    if (O != NULL) { EC_POINT_free(O); }
+    if (Q != NULL) { EC_POINT_free(Q); }
+
     return ret;
 }
+#endif

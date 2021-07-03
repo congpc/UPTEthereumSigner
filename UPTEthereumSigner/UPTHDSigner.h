@@ -1,13 +1,12 @@
 //
 //  UPTHDSigner.h
-//  uPortMobile
+//  UPTEthereumSigner
 //
 //  Created by josh on 1/5/18.
 //  Copyright © 2018 ConsenSys AG. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-
 #import "UPTProtectionLevel.h"
 
 /// @param ethAddress    an Ethereum adderss with prefix '0x'. May be nil if error occured
@@ -43,38 +42,77 @@ FOUNDATION_EXPORT NSString * const METAMASK_ROOT_DERIVATION_PATH;
 /// @param  callback contains phrase
 + (void)showSeed:(NSString *)rootAddress prompt:(NSString *)prompt callback:(UPTHDSignerSeedPhraseResult)callback;
 
+/// @param  callback     a root account Ethereum address and root account public key
++ (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
+            callback:(UPTHDSignerSeedCreationResult)callback __attribute__((deprecated));
+
++ (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
+  rootDerivationPath:(NSString *)rootDerivationPath
+            callback:(UPTHDSignerSeedCreationResult)callback;
 
 /// @param  callback     a root account Ethereum address and root account public key
-+ (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel callback:(UPTHDSignerSeedCreationResult)callback __attribute__((deprecated));
-+ (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel rootDerivationPath:(NSString *)rootDerivationPath callback:(UPTHDSignerSeedCreationResult)callback;
++ (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel phrase:(NSString *)phrase
+          callback:(UPTHDSignerSeedCreationResult)callback __attribute__((deprecated));
 
-/// @param  callback     a root account Ethereum address and root account public key
-+ (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel phrase:(NSString *)phrase callback:(UPTHDSignerSeedCreationResult)callback __attribute__((deprecated));
-+ (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel phrase:(NSString *)phrase rootDerivationPath:(NSString *)rootDerivationPath callback:(UPTHDSignerSeedCreationResult)callback;
-+ (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel words:(NSArray<NSString *> *)words rootDerivationPath:(NSString *)rootDerivationPath callback:(UPTHDSignerSeedCreationResult)callback;
++ (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+            phrase:(NSString *)phrase
+rootDerivationPath:(NSString *)rootDerivationPath
+          callback:(UPTHDSignerSeedCreationResult)callback;
+
++ (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+             words:(NSArray<NSString *> *)words
+rootDerivationPath:(NSString *)rootDerivationPath
+          callback:(UPTHDSignerSeedCreationResult)callback;
 
 /// @param  address     a root account Ethereum address
 /// @param  callback    the derived Ethereum address and derived public key
-+ (void)computeAddressForPath:(NSString *)address derivationPath:(NSString *)derivationPath prompt:(NSString *)prompt callback:(UPTHDSignerSeedCreationResult)callback;
++ (void)computeAddressForPath:(NSString *)address
+               derivationPath:(NSString *)derivationPath
+                       prompt:(NSString *)prompt
+                     callback:(UPTHDSignerSeedCreationResult)callback;
 
-
-// if you are supplying chainID, your tx payload contains 9 fields; otherwise it contains 6
+// If you are supplying chainID, your tx payload contains 9 fields; otherwise it contains 6
 /// @param  ethereumAddress     a root account Ethereum address
-+ (void)signTransaction:(NSString *)ethereumAddress derivationPath:(NSString *)derivationPath txPayload:(NSString *)txPayload prompt:(NSString *)prompt callback:(UPTHDSignerTransactionSigningResult)callback __attribute__((deprecated));
-+ (void)signTransaction:(NSString *)rootAddress derivationPath:(NSString *)derivationPath serializedTxPayload:(NSData *)serializedTxPayload chainId:(NSData *)chainId prompt:(NSString *)prompt callback:(UPTHDSignerTransactionSigningResult)callback;
++ (void)signTransaction:(NSString *)ethereumAddress
+         derivationPath:(NSString *)derivationPath
+              txPayload:(NSString *)txPayload
+                 prompt:(NSString *)prompt
+               callback:(UPTHDSignerTransactionSigningResult)callback __attribute__((deprecated));
+
++ (void)signTransaction:(NSString *)rootAddress
+         derivationPath:(NSString *)derivationPath
+    serializedTxPayload:(NSData *)serializedTxPayload
+                chainId:(NSData *)chainId
+                 prompt:(NSString *)prompt
+               callback:(UPTHDSignerTransactionSigningResult)callback;
 
 /// @param  ethereumAddress     a root account Ethereum address
-+ (void)signJWT:(NSString *)ethereumAddress derivationPath:(NSString *)derivationPath data:(NSString *)data prompt:(NSString *)prompt callback:(UPTHDSignerJWTSigningResult)callback;
++ (void)signJWT:(NSString *)ethereumAddress
+ derivationPath:(NSString *)derivationPath
+           data:(NSString *)data
+         prompt:(NSString *)prompt
+       callback:(UPTHDSignerJWTSigningResult)callback;
 
 /// @param rootAddress  a root account Ethereum address
-+ (void)privateKeyForPath:(NSString *)rootAddress derivationPath:(NSString *)derivationPath prompt:(NSString *)prompt callback:(UPTHDSignerPrivateKeyResult)callback;
++ (void)privateKeyForPath:(NSString *)rootAddress
+           derivationPath:(NSString *)derivationPath
+                   prompt:(NSString *)prompt
+                 callback:(UPTHDSignerPrivateKeyResult)callback;
+
 + (void)deleteSeed:(NSString *)phrase callback:(UPTEthSignerDeleteSeedResult)callback;
 
-// utils
+#pragma mark - Utils
+
 + (NSArray<NSString *> *)wordsFromPhrase:(NSString *)phrase;
+
 + (NSData*)randomEntropy;
+
 + (UPTHDSignerProtectionLevel)enumStorageLevelWithStorageLevel:(NSString *)storageLevel;
+
+// TODO: Move to utility class (after checking if this is not available elsewhere).
 + (NSString *)base64StringWithURLEncodedBase64String:(NSString *)URLEncodedBase64String;
+
+// TODO: Move to utility class (after checking if this is not available elsewhere).
 + (NSString *)URLEncodedBase64StringWithBase64String:(NSString *)base64String;
 
 @end

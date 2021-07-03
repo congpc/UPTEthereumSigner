@@ -1,5 +1,6 @@
 #ifndef KECCAK_FIPS202_H
 #define KECCAK_FIPS202_H
+
 #define __STDC_WANT_LIB_EXT1__ 1
 #include <stdint.h>
 #include <stdlib.h>
@@ -16,4 +17,5 @@ decsha3(224)
 decsha3(256)
 decsha3(384)
 decsha3(512)
+
 #endif
