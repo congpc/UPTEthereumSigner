@@ -27,6 +27,14 @@
         XCTAssertNil(error);
     }];
 }
+- (void)testCanCreateKeysSync
+{
+    NSDictionary* data = [UPTEthSigner createKeyPairWithStorageLevel:UPTEthKeychainProtectionLevelPromptSecureEnclave];
+    XCTAssertNotNil(data[@"ethAddress"]);
+    XCTAssertNotNil(data[@"publicKey"]);
+//    XCTAssertEqualObjects(data[@"ethAddress"], @"0x83174ccc4dd1d7dd0ba8fb05a02888848618d70c");
+//    XCTAssertEqualObjects(data[@"publicKey"], @"BH93Kn6kC/5bdJ1UWCMEewx4+9uXEP6jqwWxF8NgbG2QA34OGhRyDNc21BQRnwKdgTG/DkjWvcLmkP5p8D3OkKs=");
+}
 
 - (void)testCanRetrieveAllEthereumAddresses
 {

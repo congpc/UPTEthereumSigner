@@ -31,31 +31,47 @@ typedef void (^UPTEthSignerDeleteKeyResult)(BOOL deleted, NSError *error);
 
 + (void)createKeyPairWithStorageLevel:(UPTEthKeychainProtectionLevel)protectionLevel
                                result:(UPTEthSignerKeyPairCreationResult)result;
++ (NSDictionary*)createKeyPairWithStorageLevel:(UPTEthKeychainProtectionLevel)protectionLevel;
 
 + (void)saveKey:(NSData *)privateKey
 protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel
          result:(UPTEthSignerKeyPairCreationResult)result;
+
+// keys: ethAddress,publicKey
++ (NSDictionary*)saveKey:(NSData *)privateKey
+         protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel;
 
 // If you are supplying chainID, your tx payload contains 9 fields; otherwise it contains 6
 + (void)signTransaction:(NSString *)ethAddress
                    data:(NSString *)payload
              userPrompt:(NSString *)userPromptText
                  result:(UPTEthSignerTransactionSigningResult)result __attribute__((deprecated));
++ (NSDictionary*)signTransaction:(NSString *)ethAddress
+                            data:(NSString *)payload
+                      userPrompt:(NSString*)userPromptText;
 
 + (void)signTransaction:(NSString *)ethAddress
     serializedTxPayload:(NSData *)serializedTxPayload
                 chainId:(NSData *)chainId
              userPrompt:(NSString *)userPromptText
                  result:(UPTEthSignerTransactionSigningResult)result;
++ (NSDictionary*)signTransaction:(NSString *)ethAddress
+             serializedTxPayload:(NSData *)payloadData
+                         chainId:(NSData *)chainId
+                      userPrompt:(NSString*)userPromptText;
 
 + (void)signJwt:(NSString *)ethAddress
      userPrompt:(NSString *)userPromptText
            data:(NSData *)payload
          result:(UPTEthSignerJWTSigningResult)result;
++ (NSDictionary*)signJwt:(NSString *)ethAddress
+              userPrompt:(NSString *)userPromptText
+                    data:(NSData *)payload;
 
 + (NSString *)ethAddressWithPublicKey:(NSData *)publicKey;
 
 + (void)deleteKey:(NSString *)ethAddress result:(UPTEthSignerDeleteKeyResult)result;
++ (BOOL)deleteKey:(NSString *)ethAddress;
 
 + (NSArray *)allAddresses;
 

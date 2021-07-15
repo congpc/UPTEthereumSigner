@@ -41,28 +41,40 @@ FOUNDATION_EXPORT NSString * const METAMASK_ROOT_DERIVATION_PATH;
 
 /// @param  callback contains phrase
 + (void)showSeed:(NSString *)rootAddress prompt:(NSString *)prompt callback:(UPTHDSignerSeedPhraseResult)callback;
++ (NSString*)showSeed:(NSString *)rootAddress prompt:(NSString *)prompt;
 
 /// @param  callback     a root account Ethereum address and root account public key
+// keys: ethAddress,publicKey
 + (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
             callback:(UPTHDSignerSeedCreationResult)callback __attribute__((deprecated));
++ (NSDictionary*)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel;
 
 + (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
   rootDerivationPath:(NSString *)rootDerivationPath
             callback:(UPTHDSignerSeedCreationResult)callback;
++ (NSDictionary*)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
+    rootDerivationPath:(NSString *)rootDerivationPath;
 
 /// @param  callback     a root account Ethereum address and root account public key
 + (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel phrase:(NSString *)phrase
           callback:(UPTHDSignerSeedCreationResult)callback __attribute__((deprecated));
++ (NSDictionary*)importSeed:(UPTHDSignerProtectionLevel)protectionLevel phrase:(NSString *)phrase;
 
 + (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
             phrase:(NSString *)phrase
 rootDerivationPath:(NSString *)rootDerivationPath
           callback:(UPTHDSignerSeedCreationResult)callback;
++ (NSDictionary*)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+            phrase:(NSString *)phrase
+rootDerivationPath:(NSString *)rootDerivationPath;
 
 + (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
              words:(NSArray<NSString *> *)words
 rootDerivationPath:(NSString *)rootDerivationPath
           callback:(UPTHDSignerSeedCreationResult)callback;
++ (NSDictionary*)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+                      words:(NSArray<NSString *> *)words
+         rootDerivationPath:(NSString *)derivationPath;
 
 /// @param  address     a root account Ethereum address
 /// @param  callback    the derived Ethereum address and derived public key
@@ -70,6 +82,9 @@ rootDerivationPath:(NSString *)rootDerivationPath
                derivationPath:(NSString *)derivationPath
                        prompt:(NSString *)prompt
                      callback:(UPTHDSignerSeedCreationResult)callback;
++ (NSDictionary *)computeAddressForPath:(NSString *)address
+               derivationPath:(NSString *)derivationPath
+                       prompt:(NSString *)prompt;
 
 // If you are supplying chainID, your tx payload contains 9 fields; otherwise it contains 6
 /// @param  ethereumAddress     a root account Ethereum address
@@ -78,6 +93,10 @@ rootDerivationPath:(NSString *)rootDerivationPath
               txPayload:(NSString *)txPayload
                  prompt:(NSString *)prompt
                callback:(UPTHDSignerTransactionSigningResult)callback __attribute__((deprecated));
++ (NSDictionary *)signTransaction:(NSString *)rootAddress
+                   derivationPath:(NSString *)derivationPath
+                        txPayload:(NSString *)txPayload
+                           prompt:(NSString *)prompt;
 
 + (void)signTransaction:(NSString *)rootAddress
          derivationPath:(NSString *)derivationPath
@@ -85,6 +104,11 @@ rootDerivationPath:(NSString *)rootDerivationPath
                 chainId:(NSData *)chainId
                  prompt:(NSString *)prompt
                callback:(UPTHDSignerTransactionSigningResult)callback;
++ (NSDictionary*)signTransaction:(NSString *)rootAddress
+                  derivationPath:(NSString *)derivationPath
+             serializedTxPayload:(NSData *)payloadData
+                         chainId:(NSData *)chainId
+                          prompt:(NSString *)prompt;
 
 /// @param  ethereumAddress     a root account Ethereum address
 + (void)signJWT:(NSString *)ethereumAddress
@@ -92,14 +116,22 @@ rootDerivationPath:(NSString *)rootDerivationPath
            data:(NSString *)data
          prompt:(NSString *)prompt
        callback:(UPTHDSignerJWTSigningResult)callback;
++ (NSDictionary*)signJWT:(NSString *)rootAddress
+          derivationPath:(NSString *)derivationPath
+                    data:(NSString *)data
+                  prompt:(NSString *)prompt;
 
 /// @param rootAddress  a root account Ethereum address
 + (void)privateKeyForPath:(NSString *)rootAddress
            derivationPath:(NSString *)derivationPath
                    prompt:(NSString *)prompt
                  callback:(UPTHDSignerPrivateKeyResult)callback;
++ (NSString*)privateKeyForPath:(NSString *)rootAddress
+                derivationPath:(NSString *)derivationPath
+                        prompt:(NSString *)prompt;
 
 + (void)deleteSeed:(NSString *)phrase callback:(UPTEthSignerDeleteSeedResult)callback;
++ (BOOL)deleteSeed:(NSString *)rootEthereumAddress;
 
 #pragma mark - Utils
 

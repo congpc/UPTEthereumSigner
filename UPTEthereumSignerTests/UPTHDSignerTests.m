@@ -28,6 +28,13 @@
         XCTAssertEqual(ethAddress.length, 42);
     }];
 }
+- (void)testCanCreateKeysSync
+{
+    NSDictionary* data = [UPTHDSigner createHDSeed:UPTHDSignerProtectionLevelPromptSecureEnclave
+           rootDerivationPath:UPORT_ROOT_DERIVATION_PATH];
+    XCTAssertNotNil(data[@"ethAddress"]);
+    XCTAssertNotNil(data[@"publicKey"]);
+}
 
 - (void)checkChild:(NSInteger)index
    expectedAddress:(NSString *)expectedAddress

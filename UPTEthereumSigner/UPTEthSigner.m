@@ -39,6 +39,11 @@ NSString *const UPTSignerErrorCodeLevelSigningError = @"-14";
     BTCKey *keyPair = [[BTCKey alloc] init];
     [UPTEthSigner saveKey:keyPair.privateKey protectionLevel:protectionLevel result:result];
 }
++ (NSDictionary *)createKeyPairWithStorageLevel:(UPTEthKeychainProtectionLevel)protectionLevel
+{
+    BTCKey *keyPair = [[BTCKey alloc] init];
+    return [UPTEthSigner saveKey:keyPair.privateKey protectionLevel:protectionLevel];
+}
 
 + (void)signTransaction:(NSString *)ethAddress
                    data:(NSString *)payload
@@ -51,6 +56,16 @@ NSString *const UPTSignerErrorCodeLevelSigningError = @"-14";
                                chainId:nil
                             userPrompt:userPromptText
                                 result:result];
+}
++ (NSDictionary*)signTransaction:(NSString *)ethAddress
+                            data:(NSString *)payload
+                      userPrompt:(NSString*)userPromptText
+{
+    NSData *payloadData = [[NSData alloc] initWithBase64EncodedString:payload options:0];
+    return [UPTEthSigner signTransaction:ethAddress
+                     serializedTxPayload:payloadData
+                                 chainId:nil
+                              userPrompt:userPromptText];
 }
 
 + (void)signTransaction:(NSString *)ethAddress
@@ -95,6 +110,30 @@ NSString *const UPTSignerErrorCodeLevelSigningError = @"-14";
         result(nil, protectionLevelError);
     }
 }
++ (NSDictionary*)signTransaction:(NSString *)ethAddress
+             serializedTxPayload:(NSData *)payloadData
+                         chainId:(NSData *)chainId
+                      userPrompt:(NSString*)userPromptText
+{
+    UPTEthKeychainProtectionLevel protectionLevel = [UPTEthSigner protectionLevelWithEthAddress:ethAddress];
+    if (protectionLevel == UPTEthKeychainProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    BTCKey *key = [self keyPairWithEthAddress:ethAddress userPromptText:userPromptText protectionLevel:protectionLevel];
+    if (key)
+    {
+        NSData *hash = [UPTEthSigner keccak256:payloadData];
+        NSDictionary *signature = ethereumSignature(key, hash, chainId);
+        if (signature)
+        {
+            return signature;
+        }
+        
+    }
+    return nil;
+}
 
 + (void)signJwt:(NSString *)ethAddress
      userPrompt:(NSString *)userPromptText
@@ -135,12 +174,31 @@ NSString *const UPTSignerErrorCodeLevelSigningError = @"-14";
     }
 }
 
++ (NSDictionary*)signJwt:(NSString *)ethAddress
+     userPrompt:(NSString *)userPromptText
+           data:(NSData *)payload
+{
+    UPTEthKeychainProtectionLevel protectionLevel = [UPTEthSigner protectionLevelWithEthAddress:ethAddress];
+    if (protectionLevel == UPTEthKeychainProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    BTCKey *key = [self keyPairWithEthAddress:ethAddress userPromptText:userPromptText protectionLevel:protectionLevel];
+    if (key)
+    {
+        NSData *hash = [payload SHA256];
+        NSDictionary *signature = jwtSignature(key, hash);
+        if (signature) {
+            return @{ @"r" : signature[@"r"], @"s" : signature[@"s"], @"v" : @([signature[@"v"] intValue]) };
+        }
+    }
+    return nil;
+}
+
 + (NSArray *)allAddresses
 {
     VALValet *addressKeystore = [UPTEthSigner ethAddressesKeystore];
-//    NSError* error;
-//    NSArray *addressKeys = [[addressKeystore allKeysAndReturnError:&error] allObjects];
-//    return addressKeys;
     return [[addressKeystore allKeys] allObjects];
 }
 
@@ -161,8 +219,26 @@ protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel
 
     result(ethAddress, publicKeyString, nil);
 }
++ (NSDictionary*)saveKey:(NSData *)privateKey
+protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel
+{
+    BTCKey *keyPair = [[BTCKey alloc] initWithPrivateKey:privateKey];
+    NSString *ethAddress = [UPTEthSigner ethAddressWithPublicKey:keyPair.publicKey];
+    VALValet *privateKeystore = [UPTEthSigner privateKeystoreWithProtectionLevel:protectionLevel];
+    NSString *privateKeyLookupKeyName = [UPTEthSigner privateKeyLookupKeyNameWithEthAddress:ethAddress];
+    [privateKeystore setObject:keyPair.privateKey forKey:privateKeyLookupKeyName];
+    [UPTEthSigner saveProtectionLevel:protectionLevel withEthAddress:ethAddress];
+    [UPTEthSigner saveEthAddress:ethAddress];
+    NSString *publicKeyString = [keyPair.publicKey base64EncodedStringWithOptions:0];
+    return @{@"ethAddress": ethAddress, @"publicKey": publicKeyString};
+}
 
 + (void)deleteKey:(NSString *)ethAddress result:(UPTEthSignerDeleteKeyResult)result
+{
+    BOOL res = [self deleteKey:ethAddress];
+    result(res, nil);
+}
++ (BOOL)deleteKey:(NSString *)ethAddress
 {
     UPTEthKeychainProtectionLevel protectionLevel = [UPTEthSigner protectionLevelWithEthAddress:ethAddress];
     if (protectionLevel != UPTEthKeychainProtectionLevelNotRecognized)
@@ -176,8 +252,7 @@ protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel
     
     VALValet *addressKeystore = [UPTEthSigner ethAddressesKeystore];
     [addressKeystore removeObjectForKey:ethAddress];
-    
-    result(YES, nil);
+    return YES;
 }
 
 #pragma mark - Private

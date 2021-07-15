@@ -39,8 +39,6 @@ NSString * const UPTHDSignerErrorCodeLevelSigningError = @"-14";
 + (BOOL)hasSeed
 {
     VALValet *addressKeystore = [UPTHDSigner ethAddressesKeystore];
-//    NSError* error;
-//    NSArray *addressKeys = [[addressKeystore allKeysAndReturnError:&error] allObjects];
     NSArray *addressKeys = [[addressKeystore allKeys] allObjects];
     BOOL hasSeed = NO;
 
@@ -57,9 +55,6 @@ NSString * const UPTHDSignerErrorCodeLevelSigningError = @"-14";
 
 + (NSArray *)listSeedAddresses {
     VALValet *addressKeystore = [UPTHDSigner ethAddressesKeystore];
-//    NSError* error;
-//    NSArray *addressKeys = [[addressKeystore allKeysAndReturnError:&error] allObjects];
-//    return addressKeys;
     return [[addressKeystore allKeys] allObjects];
 }
 
@@ -94,7 +89,32 @@ NSString * const UPTHDSignerErrorCodeLevelSigningError = @"-14";
     callback(phrase, nil);
 }
 
++ (NSString*)showSeed:(NSString *)rootAddress prompt:(NSString *)prompt {
+    UPTHDSignerProtectionLevel protectionLevel = [UPTHDSigner protectionLevelWithEthAddress:rootAddress];
+    if (protectionLevel == UPTHDSignerProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    NSData *masterEntropy = [UPTHDSigner entropyWithEthAddress:rootAddress userPromptText:prompt protectionLevel:protectionLevel];
+    if (!masterEntropy)
+    {
+        return nil;
+    }
+
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithEntropy:masterEntropy
+                                                        password:@""
+                                                    wordListType:BTCMnemonicWordListTypeEnglish];
+    NSString *phrase = [mnemonic.words componentsJoinedByString:@" "];
+    return phrase;
+}
+
 + (void)deleteSeed:(NSString *)rootEthereumAddress callback:(UPTEthSignerDeleteSeedResult)callback
+{
+    BOOL res = [self deleteSeed:rootEthereumAddress];
+    callback(res, nil);
+}
++ (BOOL)deleteSeed:(NSString *)rootEthereumAddress
 {
     UPTHDSignerProtectionLevel protectionLevel = [UPTHDSigner protectionLevelWithEthAddress:rootEthereumAddress];
     if (protectionLevel != UPTHDSignerProtectionLevelNotRecognized)
@@ -111,12 +131,16 @@ NSString * const UPTHDSignerErrorCodeLevelSigningError = @"-14";
     VALValet *addressKeystore = [UPTHDSigner ethAddressesKeystore];
     [addressKeystore removeObjectForKey:rootEthereumAddress];
     
-    callback(YES, nil);
+    return YES;
 }
 
 + (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel callback:(UPTHDSignerSeedCreationResult)callback
 {
     [UPTHDSigner createHDSeed:protectionLevel rootDerivationPath:UPORT_ROOT_DERIVATION_PATH callback:callback];
+}
++ (NSDictionary*)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
+{
+    return [UPTHDSigner createHDSeed:protectionLevel rootDerivationPath:UPORT_ROOT_DERIVATION_PATH];
 }
 
 + (void)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
@@ -130,6 +154,16 @@ NSString * const UPTHDSignerErrorCodeLevelSigningError = @"-14";
     NSString *wordsString = [mnemonic.words componentsJoinedByString:@" "];
     [UPTHDSigner importSeed:protectionLevel phrase:wordsString rootDerivationPath:rootDerivationPath callback:callback];
 }
++ (NSDictionary*)createHDSeed:(UPTHDSignerProtectionLevel)protectionLevel
+  rootDerivationPath:(NSString *)rootDerivationPath
+{
+    NSData *randomEntropy = [UPTHDSigner randomEntropy];
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithEntropy:randomEntropy
+                                                        password:@""
+                                                    wordListType:BTCMnemonicWordListTypeEnglish];
+    NSString *wordsString = [mnemonic.words componentsJoinedByString:@" "];
+    return [UPTHDSigner importSeed:protectionLevel phrase:wordsString rootDerivationPath:rootDerivationPath];
+}
 
 + (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
             phrase:(NSString *)phrase
@@ -139,6 +173,13 @@ NSString * const UPTHDSignerErrorCodeLevelSigningError = @"-14";
                      phrase:phrase
          rootDerivationPath:UPORT_ROOT_DERIVATION_PATH
                    callback:callback];
+}
++ (NSDictionary*)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+                     phrase:(NSString *)phrase
+{
+    return [UPTHDSigner importSeed:protectionLevel
+                     phrase:phrase
+         rootDerivationPath:UPORT_ROOT_DERIVATION_PATH];
 }
 
 + (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
@@ -151,6 +192,15 @@ rootDerivationPath:(NSString *)rootDerivationPath
                       words:words
          rootDerivationPath:rootDerivationPath
                    callback:callback];
+}
++ (NSDictionary*)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+            phrase:(NSString *)phrase
+rootDerivationPath:(NSString *)rootDerivationPath
+{
+    NSArray<NSString *> *words = [UPTHDSigner wordsFromPhrase:phrase];
+    return [UPTHDSigner importSeed:protectionLevel
+                      words:words
+         rootDerivationPath:rootDerivationPath];
 }
 
 + (void)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
@@ -183,6 +233,32 @@ rootDerivationPath:(NSString *)derivationPath
     [UPTHDSigner saveEthAddress:rootEthereumAddress];
 
     callback(rootEthereumAddress, rootPublicKeyString, nil);
+}
++ (NSDictionary*)importSeed:(UPTHDSignerProtectionLevel)protectionLevel
+                      words:(NSArray<NSString *> *)words
+         rootDerivationPath:(NSString *)derivationPath
+{
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithWords:words
+                                                      password:@""
+                                                  wordListType:BTCMnemonicWordListTypeEnglish];
+    if (!mnemonic)
+    {
+        return nil;
+    }
+
+    BTCKeychain *masterKeychain = [[BTCKeychain alloc] initWithSeed:mnemonic.seed];
+
+    BTCKeychain *rootKeychain = [masterKeychain derivedKeychainWithPath:derivationPath];
+    NSString *rootPublicKeyString = [rootKeychain.key.uncompressedPublicKey base64EncodedStringWithOptions:0];
+    NSString *rootEthereumAddress = [UPTHDSigner ethereumAddressWithPublicKey:rootKeychain.key.uncompressedPublicKey];
+
+    VALValet *privateKeystore = [UPTHDSigner privateKeystoreWithProtectionLevel:protectionLevel];
+    NSString *privateKeyLookupKeyName = [UPTHDSigner entropyLookupKeyNameWithEthAddress:rootEthereumAddress];
+    [privateKeystore setObject:mnemonic.entropy forKey:privateKeyLookupKeyName];
+    [UPTHDSigner saveProtectionLevel:protectionLevel withEthAddress:rootEthereumAddress];
+    [UPTHDSigner saveEthAddress:rootEthereumAddress];
+
+    return @{@"ethAddress": rootEthereumAddress, @"publicKey": rootPublicKeyString};
 }
 
 + (void)computeAddressForPath:(NSString *)rootAddress
@@ -225,6 +301,35 @@ rootDerivationPath:(NSString *)derivationPath
 
     callback(rootEthereumAddress, rootPublicKeyString, nil);
 }
++ (NSDictionary*)computeAddressForPath:(NSString *)rootAddress
+               derivationPath:(NSString *)derivationPath
+                       prompt:(NSString *)prompt
+{
+    UPTHDSignerProtectionLevel protectionLevel = [UPTHDSigner protectionLevelWithEthAddress:rootAddress];
+    if (protectionLevel == UPTHDSignerProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    NSData *masterEntropy = [UPTHDSigner entropyWithEthAddress:rootAddress
+                                                userPromptText:prompt
+                                               protectionLevel:protectionLevel];
+    if (!masterEntropy)
+    {
+        return nil;
+    }
+
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithEntropy:masterEntropy
+                                                        password:@""
+                                                    wordListType:BTCMnemonicWordListTypeEnglish];
+    BTCKeychain *masterKeychain = [[BTCKeychain alloc] initWithSeed:mnemonic.seed];
+
+    BTCKeychain *rootKeychain = [masterKeychain derivedKeychainWithPath:derivationPath];
+    NSString *rootPublicKeyString = [rootKeychain.key.uncompressedPublicKey base64EncodedStringWithOptions:0];
+    NSString *rootEthereumAddress = [UPTHDSigner ethereumAddressWithPublicKey:rootKeychain.key.uncompressedPublicKey];
+
+    return @{@"ethAddress": rootEthereumAddress, @"publicKey": rootPublicKeyString};
+}
 
 + (void)signTransaction:(NSString *)rootAddress
          derivationPath:(NSString *)derivationPath
@@ -239,6 +344,18 @@ rootDerivationPath:(NSString *)derivationPath
                          chainId:nil
                           prompt:prompt
                         callback:callback];
+}
++ (NSDictionary *)signTransaction:(NSString *)rootAddress
+                   derivationPath:(NSString *)derivationPath
+                        txPayload:(NSString *)txPayload
+                           prompt:(NSString *)prompt
+{
+    NSData *payloadData = [[NSData alloc] initWithBase64EncodedString:txPayload options:0];
+    return [UPTHDSigner signTransaction:rootAddress
+                  derivationPath:derivationPath
+             serializedTxPayload:payloadData
+                         chainId:nil
+                          prompt:prompt];
 }
 
 + (void)signTransaction:(NSString *)rootAddress
@@ -290,6 +407,38 @@ rootDerivationPath:(NSString *)derivationPath
         callback(nil, signingError);
     }
 }
++ (NSDictionary*)signTransaction:(NSString *)rootAddress
+                  derivationPath:(NSString *)derivationPath
+             serializedTxPayload:(NSData *)payloadData
+                         chainId:(NSData *)chainId
+                          prompt:(NSString *)prompt
+{
+    UPTHDSignerProtectionLevel protectionLevel = [UPTHDSigner protectionLevelWithEthAddress:rootAddress];
+    if (protectionLevel == UPTHDSignerProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    NSData *masterEntropy = [UPTHDSigner entropyWithEthAddress:rootAddress userPromptText:prompt protectionLevel:protectionLevel];
+    if (!masterEntropy)
+    {
+        return nil;
+    }
+
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithEntropy:masterEntropy
+                                                        password:@""
+                                                    wordListType:BTCMnemonicWordListTypeEnglish];
+    BTCKeychain *masterKeychain = [[BTCKeychain alloc] initWithSeed:mnemonic.seed];
+    BTCKeychain *derivedKeychain = [masterKeychain derivedKeychainWithPath:derivationPath];
+
+    NSData *hash = [UPTHDSigner keccak256:payloadData];
+    NSDictionary *signature = ethereumSignature(derivedKeychain.key, hash, chainId);
+    if (signature)
+    {
+        return signature;
+    }
+    return nil;
+}
 
 + (void)signJWT:(NSString *)rootAddress
  derivationPath:(NSString *)derivationPath
@@ -339,6 +488,39 @@ rootDerivationPath:(NSString *)derivationPath
         callback(nil, signingError);
     }
 }
++ (NSDictionary*)signJWT:(NSString *)rootAddress
+          derivationPath:(NSString *)derivationPath
+                    data:(NSString *)data
+                  prompt:(NSString *)prompt
+{
+    UPTHDSignerProtectionLevel protectionLevel = [UPTHDSigner protectionLevelWithEthAddress:rootAddress];
+    if (protectionLevel == UPTHDSignerProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    NSData *masterEntropy = [UPTHDSigner entropyWithEthAddress:rootAddress
+                                                userPromptText:prompt
+                                               protectionLevel:protectionLevel];
+    if (!masterEntropy)
+    {
+        return nil;
+    }
+
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithEntropy:masterEntropy
+                                                        password:@""
+                                                    wordListType:BTCMnemonicWordListTypeEnglish];
+    BTCKeychain *masterKeychain = [[BTCKeychain alloc] initWithSeed:mnemonic.seed];
+    BTCKeychain *derivedKeychain = [masterKeychain derivedKeychainWithPath:derivationPath];
+
+    NSData *payloadData = [[NSData alloc] initWithBase64EncodedString:data options:0];
+    NSData *hash = [payloadData SHA256];
+    NSDictionary *signature = jwtSignature(derivedKeychain.key, hash);
+    if (signature) {
+        return @{ @"r" : signature[@"r"], @"s" : signature[@"s"], @"v" : @([signature[@"v"] intValue]) };
+    }
+    return nil;
+}
 
 + (void)privateKeyForPath:(NSString *)rootAddress
            derivationPath:(NSString *)derivationPath
@@ -378,6 +560,34 @@ rootDerivationPath:(NSString *)derivationPath
     NSString *derivedPrivateKeyBase64 = [derivedKeychain.key.privateKey base64EncodedStringWithOptions:0];
 
     callback(derivedPrivateKeyBase64, nil);
+}
++ (NSString*)privateKeyForPath:(NSString *)rootAddress
+           derivationPath:(NSString *)derivationPath
+                   prompt:(NSString *)prompt
+{
+    UPTHDSignerProtectionLevel protectionLevel = [UPTHDSigner protectionLevelWithEthAddress:rootAddress];
+    if (protectionLevel == UPTHDSignerProtectionLevelNotRecognized)
+    {
+        return nil;
+    }
+
+    NSData *masterEntropy = [UPTHDSigner entropyWithEthAddress:rootAddress
+                                                userPromptText:prompt
+                                               protectionLevel:protectionLevel];
+    if (!masterEntropy)
+    {
+        return nil;
+    }
+
+    BTCMnemonic *mnemonic = [[BTCMnemonic alloc] initWithEntropy:masterEntropy
+                                                        password:@""
+                                                    wordListType:BTCMnemonicWordListTypeEnglish];
+    BTCKeychain *masterKeychain = [[BTCKeychain alloc] initWithSeed:mnemonic.seed];
+    BTCKeychain *derivedKeychain = [masterKeychain derivedKeychainWithPath:derivationPath];
+
+    NSString *derivedPrivateKeyBase64 = [derivedKeychain.key.privateKey base64EncodedStringWithOptions:0];
+
+    return derivedPrivateKeyBase64;
 }
 
 #pragma mark - Private methods
