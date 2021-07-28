@@ -134,6 +134,16 @@ rootDerivationPath:(NSString *)rootDerivationPath
 + (BOOL)deleteSeed:(NSString *)rootEthereumAddress;
 
 #pragma mark - Utils
++ (NSString *)ethereumAddressWithPublicKey:(NSData *)publicKey;
++ (UPTHDSignerProtectionLevel)protectionLevelWithEthAddress:(NSString *)ethAddress;
++ (UPTHDSignerProtectionLevel)protectionLevelFromKeychainSourcedProtectionLevel:(NSString *)protectionLevel;
++ (VALValet *)privateKeystoreWithProtectionLevel:(UPTHDSignerProtectionLevel)protectionLevel;
++ (VALValet *)keystoreForProtectionLevels;
++ (NSString *)entropyLookupKeyNameWithEthAddress:(NSString *)ethAddress;
++ (NSString *)protectionLevelLookupKeyNameWithEthAddress:(NSString *)ethAddress;
++ (VALValet *)ethAddressesKeystore;
++ (NSString *)keychainCompatibleProtectionLevel:(UPTHDSignerProtectionLevel)protectionLevel;
++ (NSMutableData*)compressedPublicKey:(EC_KEY *)key;
 
 + (NSArray<NSString *> *)wordsFromPhrase:(NSString *)phrase;
 

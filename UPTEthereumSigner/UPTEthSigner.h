@@ -68,14 +68,24 @@ protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel
               userPrompt:(NSString *)userPromptText
                     data:(NSData *)payload;
 
-+ (NSString *)ethAddressWithPublicKey:(NSData *)publicKey;
-
 + (void)deleteKey:(NSString *)ethAddress result:(UPTEthSignerDeleteKeyResult)result;
 + (BOOL)deleteKey:(NSString *)ethAddress;
 
 + (NSArray *)allAddresses;
 
 #pragma mark - Utils
++ (UPTEthKeychainProtectionLevel)protectionLevelWithEthAddress:(NSString *)ethAddress;
++ (NSString *)ethAddressWithPublicKey:(NSData *)publicKey;
++ (NSString *)privateKeyLookupKeyNameWithEthAddress:(NSString *)ethAddress;
++ (NSString *)protectionLevelLookupKeyNameWithEthAddress:(NSString *)ethAddress;
++ (VALValet *)ethAddressesKeystore;
++ (NSString *)keychainCompatibleProtectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel;
++ (UPTEthKeychainProtectionLevel)protectionLevelFromKeychainSourcedProtectionLevel:(NSString *)protectionLevel;
++ (NSSet *)addressesFromKeystore:(UPTEthKeychainProtectionLevel)protectionLevel;
++ (BTCKey *)keyPairWithEthAddress:(NSString *)ethAddress
+                   userPromptText:(NSString *)userPromptText
+                  protectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel;
++ (VALValet *)privateKeystoreWithProtectionLevel:(UPTEthKeychainProtectionLevel)protectionLevel;
 
 + (UPTEthKeychainProtectionLevel)enumStorageLevelWithStorageLevel:(NSString *)storageLevel;
 
